@@ -125,8 +125,9 @@ function construirRamoPrincipal() {
         hojaD.className = "hoja der";
         hojaD.style.bottom = Math.round(f.alto * esc * 0.45) + "px";
         hojaD.style.animationDelay = "0.9s";
-        grupo.appendChild(hojaI);
-        grupo.appendChild(hojaD);
+        // Hijas del tallo (7px): así nacen pegadas a él y no flotan
+        tallo.appendChild(hojaI);
+        tallo.appendChild(hojaD);
       }
       ramoPrincipal.appendChild(grupo);
     });
@@ -228,7 +229,8 @@ function construirTulipanes() {
     hoja.className = "hoja " + (i % 2 === 0 ? "izq" : "der");
     hoja.style.bottom = Math.round(f.alto * esc * 0.35) + "px";
     hoja.style.animationDelay = delay + 0.5 + "s";
-    grupo.appendChild(hoja);
+    // Hija del tallo: nace pegada a él
+    tallo.appendChild(hoja);
 
     ramoTulipanes.appendChild(grupo);
   });

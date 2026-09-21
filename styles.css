@@ -322,13 +322,13 @@ main { position: relative; z-index: 2; }
   animation: aparecer 0.7s ease-out both;
 }
 .hoja.izq {
-  left: -24px;
+  left: -28px;
   transform: rotate(-28deg);
   transform-origin: right center;
   border-radius: 100% 4px 100% 4px;
 }
 .hoja.der {
-  right: -24px;
+  right: -28px;
   transform: rotate(28deg);
   transform-origin: left center;
   border-radius: 4px 100% 4px 100%;
