@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elige tus flores 💐 — 21 de Septiembre</title>
+  <meta name="description" content="Minijuego: elige flores del campo y arma tu propio ramo. Girasoles, tulipanes, rosas y lirios del valle." />
+  <meta name="theme-color" content="#fff0f3" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💐</text></svg>" />
+  <link rel="stylesheet" href="styles.css?v=5" />
+  <link rel="stylesheet" href="juego.css?v=3" />
+</head>
+<body id="arriba">
+
+  <!-- Pétalos flotantes (igual que el index) -->
+  <div id="petalos-fondo" aria-hidden="true"></div>
+
+  <!-- ===== NAVEGACIÓN ===== -->
+  <header class="navbar">
+    <nav class="navbar-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-flor">🌼</span>
+        <span class="logo-texto">21 de Septiembre</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">🌻 Ramo</a>
+        <a href="index.html#tulipanes" class="nav-link">🌹 Tulipanes</a>
+        <a href="index.html#mensaje" class="nav-link">💌 Mensaje</a>
+        <a href="juego.html" class="nav-link active">🌸 Mi ramo</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="seccion seccion-juego">
+      <div class="contenedor">
+        <p class="etiqueta">Minijuego · El campo de flores</p>
+        <h1 class="titulo">Elige tus <span class="resaltado">flores</span></h1>
+        <p class="subtitulo">
+          Toca una flor del campo para sumarla a tu ramo. Si cambias de idea,
+          quítala del ramo y volverá a su lugar. 🌸
+        </p>
+
+        <div class="juego-layout">
+          <!-- Campo de flores -->
+          <div class="panel">
+            <div class="panel-head">
+              <h2>El campo · <span id="contador-campo"></span></h2>
+              <button id="btn-reiniciar" class="link">Reiniciar campo</button>
+            </div>
+            <div id="campo" class="campo-grid"></div>
+          </div>
+
+          <!-- Ramo (carrito de flores) -->
+          <aside class="panel ramo-panel" aria-label="Tu ramo">
+            <h2>Mi ramo · <span id="contador-ramo">0 flores</span></h2>
+            <p id="vacio-ramo" class="vacio">Aún no elegiste flores. ¡Toca las del campo!</p>
+            <ul id="lista-ramo"></ul>
+            <button id="btn-obtener" class="btn btn-principal" disabled>💐 Obtener ramo</button>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ramo generado con las flores elegidas -->
+    <section id="resultado" class="seccion seccion-resultado" hidden>
+      <div class="contenedor centrado">
+        <p class="etiqueta">Tu creación</p>
+        <h2 class="titulo-seccion">Tu ramo de <span class="resaltado">flores elegidas</span></h2>
+        <p class="subtitulo">Armado pétalo a pétalo con tu selección 💛</p>
+        <div class="color-row" role="group" aria-label="Color del ramo">
+          <span class="color-titulo">Color del ramo:</span>
+          <button type="button" class="color-btn" data-color="original"><span class="muestra" style="background:conic-gradient(#e63956,#ffc400,#a678f0,#f7b8c8,#e63956)"></span>Original</button>
+          <button type="button" class="color-btn" data-color="rojo"><span class="muestra" style="background:#e63956"></span>Rojo</button>
+          <button type="button" class="color-btn" data-color="rosa"><span class="muestra" style="background:#f7b8c8"></span>Rosa</button>
+          <button type="button" class="color-btn" data-color="morado"><span class="muestra" style="background:#a678f0"></span>Morado</button>
+          <button type="button" class="color-btn" data-color="amarillo"><span class="muestra" style="background:#ffc400"></span>Amarillo</button>
+        </div>
+        <div class="escena">
+          <div class="resplandor" aria-hidden="true"></div>
+          <div id="flores-elegidas" class="ramo" aria-label="Ramo con tus flores elegidas"></div>
+          <div class="sombra" aria-hidden="true"></div>
+        </div>
+        <div class="botones">
+          <a class="btn btn-secundario" href="#arriba">🌸 Seguir eligiendo</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Hecho con ❤️ para el <strong>21 de septiembre</strong> · Flores Amarillas</p>
+  </footer>
+
+  <script src="flores.js?v=3"></script>
+  <script src="juego.js?v=4"></script>
+</body>
+</html>

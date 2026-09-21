@@ -208,44 +208,6 @@ main { position: relative; z-index: 2; }
   text-wrap: pretty;
 }
 
-/* ---------- Pasos de crecimiento ---------- */
-.pasos {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 22px 0 6px;
-}
-.paso {
-  display: flex;
-  align-items: center;
-  gap: var(--s2);
-  background: var(--surface);
-  border: 2px solid var(--border);
-  padding: var(--s2) 14px;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #a34a5e;
-  transition: background-color 150ms ease-out, transform 150ms ease-out, border-color 150ms ease-out;
-}
-.paso .punto {
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  background: #f4a9bc;
-  border: 1px solid rgba(143, 15, 46, 0.35);
-  transition: background-color 150ms ease-out, box-shadow 150ms ease-out;
-}
-.paso.activo {
-  background: linear-gradient(180deg, #f0506e, var(--rojo-fuerte));
-  color: #fff;
-  border-color: var(--rojo-oscuro);
-  transform: scale(1.05);
-}
-.paso.activo .punto { background: var(--verde); box-shadow: 0 0 8px var(--verde); }
-.paso.completado { background: #ffe3e6; }
-.paso.completado .punto { background: var(--verde); }
-
 /* ---------- Escena / Ramo ---------- */
 .escena {
   position: relative;
@@ -291,148 +253,31 @@ main { position: relative; z-index: 2; }
   align-items: flex-end;
 }
 
-/* Cada flor del ramo principal */
-.tallo-grupo {
-  position: absolute;
-  bottom: 110px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transform-origin: bottom center;
-}
-.tallo {
-  position: relative;
-  width: 7px;
-  border-radius: 6px;
-  background: linear-gradient(90deg, var(--verde-oscuro), var(--verde) 50%, var(--verde-oscuro));
-  transform-origin: bottom center;
-  animation: crecerTallo 1.2s ease-out both;
-}
-@keyframes crecerTallo {
-  from { transform: scaleY(0); }
-  to { transform: scaleY(1); }
-}
-/* Hojas pegadas al tallo (antes flotaban a 38px) */
-.hoja {
-  position: absolute;
-  width: 38px;
-  height: 18px;
-  background: linear-gradient(135deg, #52b364, var(--verde-oscuro));
-  box-shadow: 0 2px 4px rgba(42, 122, 56, 0.35);
-  animation: aparecer 0.7s ease-out both;
-}
-.hoja.izq {
-  left: -28px;
-  transform: rotate(-28deg);
-  transform-origin: right center;
-  border-radius: 100% 4px 100% 4px;
-}
-.hoja.der {
-  right: -28px;
-  transform: rotate(28deg);
-  transform-origin: left center;
-  border-radius: 4px 100% 4px 100%;
-}
-@keyframes aparecer {
-  from { transform: scale(0); opacity: 0; }
-  to { opacity: 1; }
-}
-.hoja.izq { animation-name: aparecerIzq; }
-.hoja.der { animation-name: aparecerDer; }
-@keyframes aparecerIzq {
-  from { transform: rotate(-28deg) scale(0); opacity: 0; }
-  to { transform: rotate(-28deg) scale(1); opacity: 1; }
-}
-@keyframes aparecerDer {
-  from { transform: rotate(28deg) scale(0); opacity: 0; }
-  to { transform: rotate(28deg) scale(1); opacity: 1; }
-}
-
-/* Cabeza de flor amarilla */
-.flor {
-  position: relative;
-  animation: abrirFlor 1s ease-out both;
-  filter: drop-shadow(0 6px 8px var(--sombra));
-}
-@keyframes abrirFlor {
-  0% { transform: scale(0) rotate(-40deg); }
-  60% { transform: scale(1.25) rotate(8deg); }
-  100% { transform: scale(1) rotate(0); }
-}
-.flor .petalo {
-  position: absolute;
-  left: 50%;
-  bottom: 50%;
-  width: 32%;
-  height: 52%;
+/* ---------- Ramos SVG (flores.js) ---------- */
+/* El ramo llega completo en un SVG (tallos curvos convergentes,
+   papel y lazo): los tallos nacen dentro del papel y no desbordan. */
+.ramo > svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
   transform-origin: 50% 100%;
-  background: radial-gradient(circle at 50% 30%, #fff6ab 0%, var(--amarillo-claro) 35%, var(--amarillo) 65%, var(--amarillo-fuerte) 100%);
-  border-radius: 50% 50% 45% 45% / 65% 65% 35% 35%;
-  border: 1.5px solid #d99a00;
+  animation: mecerRamo 6s ease-in-out infinite;
 }
-.flor .centro {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 35% 35%, #a06a00 2px, transparent 2.5px),
-    radial-gradient(circle at 60% 50%, #a06a00 2px, transparent 2.5px),
-    radial-gradient(circle at 40% 65%, #a06a00 2px, transparent 2.5px),
-    radial-gradient(circle, #7a4d00 0%, #c07f00 45%, #f0a500 100%);
-  border: 2px solid #7a4d00;
-  box-shadow: inset 0 -3px 6px rgba(0,0,0,0.3);
-  z-index: 3;
+@keyframes mecerRamo {
+  0%, 100% { transform: rotate(-0.8deg); }
+  50% { transform: rotate(0.8deg); }
 }
-.flor.boton .petalo { filter: brightness(0.82) saturate(0.7); }
-
-/* Papel que envuelve el ramo */
-.papel {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 68%;
-  height: 150px;
-  background: linear-gradient(160deg, #ffe3e6, #ff8fa3 55%, var(--rojo));
-  clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%);
-  border-top: 3px solid var(--rojo-oscuro);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 34px;
-  animation: aparecer 0.9s ease-out both;
-  box-shadow: 0 10px 20px var(--sombra);
-  z-index: 10;
+.ramo svg .fl {
+  transform-box: fill-box;
+  transform-origin: 50% 88%;
+  animation: florNacer 0.9s ease-out both;
 }
-.papel::after {
-  content: "💛 21 Sept 💛";
-  font-weight: 800;
-  font-size: 0.85rem;
-  color: var(--rojo-oscuro);
-  background: rgba(255,255,255,0.7);
-  padding: 6px var(--s3);
-  border-radius: 999px;
-  white-space: nowrap;
-}
-.lazo {
-  position: absolute;
-  bottom: 118px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 2rem;
-  line-height: 1;
-  z-index: 11;
-  animation: aparecer 0.8s 0.3s both;
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
-}
-
-.estado {
-  min-height: 28px;
-  font-weight: 700;
-  color: var(--muted);
-  margin: var(--s2) 0;
+/* Se animan las propiedades independientes (scale/rotate) en vez de
+   `transform`: así no interfiere con el posicionamiento del SVG. */
+@keyframes florNacer {
+  0% { scale: 0; rotate: -28deg; opacity: 0; }
+  60% { scale: 1.18; rotate: 6deg; opacity: 1; }
+  100% { scale: 1; rotate: 0deg; opacity: 1; }
 }
 
 /* ---------- Botones ---------- */
@@ -476,65 +321,6 @@ main { position: relative; z-index: 2; }
 
 /* ---------- Tulipanes ---------- */
 .escena-tulipanes { min-height: 440px; }
-.tulipan-grupo {
-  position: absolute;
-  bottom: 115px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transform-origin: bottom center;
-}
-.tulipan {
-  position: relative;
-  animation: abrirFlor 0.9s ease-out both;
-  filter: drop-shadow(0 6px 8px var(--sombra));
-}
-.tulipan .petalo-t {
-  position: absolute;
-  bottom: 0;
-  width: 46%;
-  height: 88%;
-  background: linear-gradient(180deg, #fff3a0 0%, var(--amarillo-claro) 25%, var(--amarillo) 60%, #e89b00 100%);
-  border: 1.5px solid #c07f00;
-}
-.tulipan .petalo-t.izq {
-  left: 8%;
-  border-radius: 50% 20% 40% 60% / 70% 30% 60% 30%;
-  transform: rotate(-8deg);
-}
-.tulipan .petalo-t.der {
-  right: 8%;
-  border-radius: 20% 50% 60% 40% / 30% 70% 30% 60%;
-  transform: rotate(8deg);
-}
-.tulipan .petalo-t.centro-t {
-  left: 27%;
-  width: 46%;
-  z-index: 2;
-  border-radius: 18% 18% 45% 45% / 12% 12% 55% 55%;
-  background: linear-gradient(180deg, #ffedb0 0%, var(--amarillo) 40%, var(--amarillo-fuerte) 100%);
-  clip-path: polygon(0 12%, 18% 0, 38% 12%, 55% 0, 75% 12%, 100% 2%, 100% 100%, 0 100%);
-}
-.tarjetas-significado {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-top: 26px;
-  width: 100%;
-  max-width: 700px;
-}
-.tarjeta {
-  background: var(--surface);
-  border: 2px solid var(--border);
-  border-radius: var(--radio);
-  padding: 18px 14px;
-  box-shadow: 0 8px 18px rgba(180,130,0,0.15);
-  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
-}
-.tarjeta:hover { transform: translateY(-2px); box-shadow: 0 12px 22px rgba(194, 23, 63, 0.2); }
-.tarjeta span { font-size: 1.8rem; }
-.tarjeta strong { display: block; margin: 6px 0 var(--s1); }
-.tarjeta p { color: var(--muted); font-size: 0.9rem; line-height: 1.55; }
 
 /* ---------- Sobre / Mensaje ---------- */
 /* FIX: la carta al abrir necesita aire arriba; antes tapaba el título
@@ -663,21 +449,6 @@ main { position: relative; z-index: 2; }
   background: linear-gradient(180deg, transparent, rgba(255, 227, 230, 0.85));
 }
 
-/* Tulipanes rojos */
-.tulipan .petalo-t {
-  background: linear-gradient(180deg, #ffd9e0 0%, var(--rojo-claro) 25%, var(--rojo) 60%, #a3122e 100%);
-  border: 1.5px solid #a3122e;
-}
-.tulipan .petalo-t.centro-t {
-  background: linear-gradient(180deg, #ffe3e6 0%, var(--rojo) 40%, var(--rojo-fuerte) 100%);
-}
-
-/* El ramo de tulipanes lleva sello rojo; el de girasoles conserva el 💛 */
-.seccion-tulipanes .papel::after {
-  content: "❤️ 21 Sept ❤️";
-  color: var(--rojo-oscuro);
-}
-
 /* Sobre rojo */
 .seccion-mensaje .sobre-cuerpo {
   background: linear-gradient(160deg, #ff9eb0, var(--rojo));
@@ -702,17 +473,11 @@ main { position: relative; z-index: 2; }
   .logo-texto { font-size: 0.92rem; }
   .nav-link { font-size: 0.85rem; padding: 7px var(--s3); }
   .seccion { padding: 44px 14px; }
-  .tarjetas-significado { grid-template-columns: 1fr; max-width: 340px; }
   .escena { min-height: 400px; height: min(560px, 150vw); }
-  .papel { height: 125px; }
   .btn { width: 100%; max-width: 320px; }
   .sobre-escena { padding-top: 150px; }
   .sobre.abierto .carta { transform: translateY(-58%); }
   .carta-texto { font-size: 0.92rem; }
-}
-
-@media (min-width: 641px) and (max-width: 900px) {
-  .tarjetas-significado { grid-template-columns: repeat(3, 1fr); gap: 10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

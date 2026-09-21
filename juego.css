@@ -1,0 +1,330 @@
+/* ==========================================================
+   MINIJUEGO — Campo de flores
+   Reutiliza tokens, navbar, botones y escena de styles.css
+   ========================================================== */
+
+.seccion-juego { padding-bottom: 32px; }
+.seccion-resultado {
+  background: linear-gradient(180deg, transparent, rgba(255, 227, 230, 0.85));
+  padding-top: 32px;
+}
+
+/* ---------- Tablero: campo + ramo lado a lado ---------- */
+.juego-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: var(--s4);
+  width: 100%;
+  margin-top: var(--s6);
+  align-items: start;
+  text-align: left;
+}
+
+.panel {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radio);
+  padding: var(--s5);
+  box-shadow: 0 8px 18px rgba(194, 23, 63, 0.12);
+}
+
+.panel h2 {
+  font-size: 1.15rem;
+  text-wrap: balance;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s2);
+  margin-bottom: var(--s4);
+  flex-wrap: wrap;
+}
+
+.link {
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--rojo-fuerte);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: var(--s1) var(--s2);
+}
+
+/* ---------- Campo: parcelas con flores ---------- */
+.campo-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s3);
+}
+
+.parcela {
+  font-family: inherit;
+  position: relative;
+  aspect-ratio: 3 / 4;
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(180deg, #ffeef2, #ffd9e0);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 0;
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out, border-color 150ms ease-out;
+}
+
+button.parcela:hover {
+  transform: translateY(-4px);
+  border-color: var(--rojo-fuerte);
+  box-shadow: 0 10px 20px rgba(194, 23, 63, 0.25);
+}
+
+button.parcela:active { transform: translateY(0) scale(0.97); }
+
+button.parcela:disabled { cursor: default; }
+
+.planta {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height: 88%;
+  margin-top: 4%;
+  transform-origin: 50% 100%;
+  animation: mecer 3.4s ease-in-out infinite;
+  transition: transform 280ms ease-in, opacity 280ms ease-in;
+}
+
+@keyframes mecer {
+  0%, 100% { transform: rotate(-2.5deg); }
+  50% { transform: rotate(2.5deg); }
+}
+
+.tallo-campo {
+  width: 7px;
+  height: 52%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--verde-oscuro), var(--verde) 50%, var(--verde-oscuro));
+  order: 2;
+}
+
+.flor-campo {
+  width: 78%;
+  aspect-ratio: 1;
+  order: 1;
+  margin-bottom: -6px;
+  filter: drop-shadow(0 4px 5px var(--sombra));
+}
+
+.flor-campo svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* Arrancar: la planta se encoge y se desvanece hacia el ramo */
+.parcela.arrancada .planta {
+  animation: none;
+  transform: translateY(-34px) scale(0);
+  opacity: 0;
+}
+
+/* Volver: la flor nace de nuevo en su parcela */
+.parcela.nace .planta { animation: nacer 500ms ease-out, mecer 3.4s ease-in-out 500ms infinite; }
+
+@keyframes nacer {
+  from { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.12); opacity: 1; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.tierra {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 74%;
+  height: 12%;
+  background: radial-gradient(ellipse at 50% 35%, #c79a7d, #8a5f43 75%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* Parcela vacía: solo tierra + brote */
+.parcela.vacia { cursor: default; }
+
+.brote {
+  position: relative;
+  z-index: 2;
+  width: 8px;
+  height: 26%;
+  margin-top: 38%;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #9cc4a5, #6da878);
+}
+
+.brote::before,
+.brote::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  width: 20px;
+  height: 11px;
+  background: #a9cdb2;
+  border-radius: 100% 4px 100% 4px;
+  opacity: 0.9;
+}
+
+.brote::before { right: 2px; transform: rotate(-24deg); transform-origin: right center; }
+.brote::after { left: 2px; transform: rotate(24deg) scaleX(-1); transform-origin: left center; }
+
+/* ---------- Ramo (carrito de flores) ---------- */
+.ramo-panel {
+  position: sticky;
+  top: 84px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+}
+
+.vacio {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  background: var(--rosa-fondo);
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+  padding: var(--s4);
+  text-align: center;
+}
+
+#lista-ramo {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+  max-height: 320px;
+  overflow: auto;
+  padding: 0;
+  margin: 0;
+}
+
+.item-ramo {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: var(--s2) var(--s3);
+  animation: entrar 300ms ease-out;
+}
+
+@keyframes entrar {
+  from { transform: translateX(24px) scale(0.9); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+
+.item-ramo .mini {
+  width: 38px;
+  height: 38px;
+  flex: none;
+}
+
+.item-ramo .mini svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.item-ramo .nombre {
+  flex: 1;
+  font-weight: 800;
+  font-size: 0.92rem;
+}
+
+.quitar {
+  font-family: inherit;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid var(--rojo-oscuro);
+  background: #fff;
+  color: var(--rojo-fuerte);
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+  line-height: 1;
+  transition: background-color 150ms ease-out, color 150ms ease-out, transform 150ms ease-out;
+}
+
+.quitar:hover {
+  background: var(--rojo-fuerte);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.ramo-panel .btn { width: 100%; }
+
+/* ---------- Color del ramo generado ---------- */
+.color-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  flex-wrap: wrap;
+  margin: var(--s4) 0 var(--s2);
+}
+.color-titulo {
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.color-btn {
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  font-weight: 800;
+  font-size: 0.88rem;
+  color: var(--foreground);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  padding: 7px 14px 7px 8px;
+  cursor: pointer;
+  transition: transform 150ms ease-out, border-color 150ms ease-out, box-shadow 150ms ease-out;
+}
+.color-btn .muestra {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  flex: none;
+}
+.color-btn:hover { transform: translateY(-2px); }
+.color-btn.activo {
+  border-color: var(--rojo-oscuro);
+  box-shadow: 0 0 0 3px var(--rosa-fondo);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .juego-layout { grid-template-columns: 1fr; }
+  .ramo-panel { position: static; }
+}
+
+@media (max-width: 640px) {
+  .campo-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .panel { padding: var(--s4); }
+}
