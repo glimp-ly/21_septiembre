@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>21 de Septiembre — Flores Amarillas 🌼</title>
+  <meta name="description" content="Página interactiva de flores amarillas para el 21 de septiembre. Un ramo que crece con JavaScript, tulipanes y un mensaje especial." />
+  <meta name="theme-color" content="#fff0f3" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌼</text></svg>" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Pétalos flotantes generados por JS -->
+  <div id="petalos-fondo" aria-hidden="true"></div>
+
+  <!-- ===== NAVEGACIÓN ===== -->
+  <header class="navbar">
+    <nav class="navbar-inner">
+      <a href="#inicio" class="logo">
+        <span class="logo-flor">🌼</span>
+        <span class="logo-texto">21 de Septiembre</span>
+      </a>
+      <div class="nav-links">
+        <a href="#inicio" class="nav-link active" data-seccion="inicio">🌻 Ramo</a>
+        <a href="#tulipanes" class="nav-link" data-seccion="tulipanes">🌹 Tulipanes</a>
+        <a href="#mensaje" class="nav-link" data-seccion="mensaje">💌 Mensaje</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ============================================================
+         APARTADO 1 — HOMEPAGE / RAMO QUE CRECE
+    ============================================================= -->
+    <section id="inicio" class="seccion seccion-inicio">
+      <div class="contenedor centrado">
+        <p class="etiqueta">21 de septiembre · Flores amarillas</p>
+        <h1 class="titulo">Un ramo que <span class="resaltado">florece para ti</span></h1>
+        <p class="subtitulo">
+          Este ramo no estaba aquí. Nace, crece y florece frente a tus ojos,
+          solo para ti 💛
+        </p>
+
+        <!-- Barra de crecimiento -->
+        <div class="pasos" id="pasos">
+          <div class="paso" data-paso="0"><span class="punto"></span>Semilla</div>
+          <div class="paso" data-paso="1"><span class="punto"></span>Tallos</div>
+          <div class="paso" data-paso="2"><span class="punto"></span>Botones</div>
+          <div class="paso" data-paso="3"><span class="punto"></span>Floración</div>
+        </div>
+
+        <!-- ESCENA DEL RAMO (vacía: JS la construye) -->
+        <div class="escena">
+          <div class="resplandor" aria-hidden="true"></div>
+          <div id="ramo-principal" class="ramo" aria-label="Ramo de flores amarillas"></div>
+          <div class="sombra" aria-hidden="true"></div>
+        </div>
+
+        <p id="estado-floracion" class="estado" aria-live="polite">🌱 Preparando la tierra…</p>
+
+        <div class="botones">
+          <button id="btn-reflorecer" class="btn btn-principal">🌼 Ver florecer de nuevo</button>
+          <button id="btn-petales" class="btn btn-secundario">Pétalos: ON</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         APARTADO 2 — RAMO DE TULIPANES
+    ============================================================= -->
+    <section id="tulipanes" class="seccion seccion-tulipanes">
+      <div class="contenedor centrado">
+        <p class="etiqueta">Apartado 2 · Rojo como el amor</p>
+        <h2 class="titulo-seccion">Ramo de <span class="resaltado">tulipanes rojos</span></h2>
+        <p class="subtitulo">
+          Los tulipanes rojos significan amor verdadero, pasión y romance eterno ❤️
+        </p>
+
+        <div class="escena escena-tulipanes">
+          <div class="resplandor" aria-hidden="true"></div>
+          <div id="ramo-tulipanes" class="ramo ramo-tulipanes" aria-label="Ramo de tulipanes amarillos"></div>
+          <div class="sombra" aria-hidden="true"></div>
+        </div>
+
+        <div class="botones">
+          <button id="btn-tulipanes" class="btn btn-principal">🌹 Generar otro ramo</button>
+        </div>
+
+        <div class="tarjetas-significado">
+          <div class="tarjeta"><span>❤️</span><strong>Amor</strong><p>Eres mi persona favorita.</p></div>
+          <div class="tarjeta"><span>💋</span><strong>Pasión</strong><p>Que nunca se apague nuestra chispa.</p></div>
+          <div class="tarjeta"><span>💌</span><strong>Romance</strong><p>Sincero, cálido y eterno.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         APARTADO 3 — MENSAJE (EDÍTALO A TU GUSTO)
+         👉 Para cambiar el mensaje, edita el objeto CONFIG_MENSAJE
+            al inicio de script.js. También puedes editar el HTML de abajo.
+    ============================================================= -->
+    <section id="mensaje" class="seccion seccion-mensaje">
+      <div class="contenedor centrado">
+        <p class="etiqueta">Apartado 3 · Tu carta especial</p>
+        <h2 class="titulo-seccion">Un mensaje <span class="resaltado">para ti</span></h2>
+        <p class="subtitulo">Toca el sobre para abrir tu carta.</p>
+
+        <div class="sobre-escena">
+          <!-- Sobre -->
+          <div id="sobre" class="sobre cerrado" role="button" tabindex="0" aria-label="Abrir carta">
+            <div class="sobre-cuerpo"></div>
+            <div id="carta" class="carta">
+              <!-- ✏️ EDITA AQUÍ TU MENSAJE (o en script.js > CONFIG_MENSAJE) -->
+              <p id="mensaje-para" class="carta-para">Para: Mi persona favorita ❤️</p>
+              <h3 id="mensaje-titulo" class="carta-titulo">Feliz 21 de septiembre 🌹</h3>
+              <p id="mensaje-texto" class="carta-texto">Aquí escribirás tu mensaje…</p>
+              <p id="mensaje-firma" class="carta-firma">— Con todo mi amor ❤️</p>
+            </div>
+            <div class="sobre-tapa"></div>
+            <div class="sobre-sello">❤️</div>
+          </div>
+        </div>
+
+        <div class="botones">
+          <button id="btn-sobre" class="btn btn-principal">💌 Abrir / Cerrar carta</button>
+          <button id="btn-escribir" class="btn btn-secundario">✍️ Efecto máquina de escribir</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Hecho con ❤️ para el <strong>21 de septiembre</strong> · by Glimp </p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

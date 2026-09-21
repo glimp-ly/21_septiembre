@@ -1,0 +1,720 @@
+/* ==========================================================
+   FLORES AMARILLAS — 21 de Septiembre
+   Refactor visual: tokens semánticos, mobile-first,
+   WCAG AA, microinteracciones 150ms, sin alturas rígidas.
+   ========================================================== */
+:root {
+  /* Paleta base: página rosa; solo los girasoles conservan el amarillo */
+  --fondo: #fff0f3;
+  --fondo-2: #ffdde5;
+  --texto: #581c2e;
+  --texto-suave: #a34a5e;
+  --amarillo: #ffcf00;
+  --amarillo-fuerte: #ffb300;
+  --amarillo-claro: #ffe55c;
+  --verde: #3e9e4f;
+  --verde-oscuro: #2a7a38;
+  --marron: #8f0f2e;
+  --blanco: #ffffff;
+  --sombra: rgba(194, 23, 63, 0.25);
+  --radio: 22px;
+  --ancho-max: 1020px;
+
+  /* Tokens semánticos (OPENCODE.md: bg-background, text-foreground…) */
+  --background: var(--fondo);
+  --surface: #fffdf2;
+  --foreground: var(--texto);
+  --muted: var(--texto-suave);
+  --border: rgba(143, 15, 46, 0.22);
+  --accent: var(--amarillo);
+  --accent-ink: var(--texto);
+  --ring: var(--marron);
+
+  /* Espaciado escala 4/8 */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px;
+  --s5: 20px; --s6: 24px; --s8: 32px; --s12: 48px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 84px;
+}
+
+body {
+  font-family: "Segoe UI", "Nunito", system-ui, -apple-system, Arial, sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%, #ffd9e0 0, transparent 32%),
+    radial-gradient(circle at 85% 20%, #ffc9d4 0, transparent 30%),
+    linear-gradient(180deg, var(--background) 0%, #ffdde5 100%);
+  color: var(--foreground);
+  min-height: 100vh;
+  overflow-x: hidden;
+  text-align: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Accesibilidad: foco visible en todo lo interactivo */
+:where(a, button, [tabindex], summary):focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* ---------- Pétalos flotantes de fondo ---------- */
+#petalos-fondo {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.petalo-fondo {
+  position: absolute;
+  top: -30px;
+  width: 16px;
+  height: 20px;
+  background: radial-gradient(circle at 30% 30%, #ffe3e6, #f0506e);
+  border-radius: 60% 40% 60% 40%;
+  opacity: 0.7;
+  animation: caer linear infinite;
+}
+@keyframes caer {
+  to { transform: translateY(110vh) rotate(540deg); }
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 240, 243, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid rgba(194, 23, 63, 0.25);
+}
+.navbar-inner {
+  max-width: var(--ancho-max);
+  margin: 0 auto;
+  padding: var(--s3) var(--s4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  text-decoration: none;
+  color: var(--foreground);
+  font-weight: 800;
+}
+.logo-flor { font-size: 1.6rem; }
+.logo-texto { font-size: 1rem; }
+.nav-links {
+  display: flex;
+  gap: var(--s2);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.nav-link {
+  text-decoration: none;
+  color: var(--foreground);
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: var(--s2) 14px;
+  border-radius: 999px;
+  background: transparent;
+  border: 2px solid transparent;
+  transition: background-color 150ms ease-out, transform 150ms ease-out, box-shadow 150ms ease-out;
+}
+.nav-link:hover { background: #ffd9e0; }
+.nav-link:active { transform: translateY(1px); }
+.nav-link.active {
+  background: var(--rojo);
+  color: #fff;
+  border-color: var(--rojo-oscuro);
+  box-shadow: 0 4px 0 var(--rojo-oscuro);
+}
+
+/* ---------- Secciones ---------- */
+main { position: relative; z-index: 2; }
+.seccion {
+  padding: 64px 18px;
+  display: flex;
+  justify-content: center;
+}
+.contenedor {
+  width: 100%;
+  max-width: var(--ancho-max);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.centrado { text-align: center; }
+
+.seccion-tulipanes {
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,0.65) 20%, rgba(255,255,255,0.65) 80%, transparent);
+}
+.seccion-mensaje { padding-bottom: 90px; }
+
+.etiqueta {
+  display: inline-block;
+  background: var(--rojo-oscuro);
+  color: var(--rojo-suave);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 7px var(--s4);
+  border-radius: 999px;
+  margin-bottom: var(--s4);
+}
+.titulo {
+  font-size: clamp(2rem, 5.5vw, 3.4rem);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  margin-bottom: var(--s3);
+  text-wrap: balance;
+  max-width: 20ch;
+}
+.titulo-seccion {
+  font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 10px;
+  text-wrap: balance;
+  max-width: 24ch;
+}
+/* Resaltador que no se corta entre líneas */
+.resaltado {
+  color: var(--rojo-fuerte);
+  background: linear-gradient(transparent 52%, #ffc9d4 52%, #ffc9d4 96%, transparent 96%);
+  padding: 0 var(--s1);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.subtitulo {
+  color: var(--muted);
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  max-width: 62ch;
+  margin: 0 auto var(--s2);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+/* ---------- Pasos de crecimiento ---------- */
+.pasos {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 22px 0 6px;
+}
+.paso {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  padding: var(--s2) 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #a34a5e;
+  transition: background-color 150ms ease-out, transform 150ms ease-out, border-color 150ms ease-out;
+}
+.paso .punto {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: #f4a9bc;
+  border: 1px solid rgba(143, 15, 46, 0.35);
+  transition: background-color 150ms ease-out, box-shadow 150ms ease-out;
+}
+.paso.activo {
+  background: linear-gradient(180deg, #f0506e, var(--rojo-fuerte));
+  color: #fff;
+  border-color: var(--rojo-oscuro);
+  transform: scale(1.05);
+}
+.paso.activo .punto { background: var(--verde); box-shadow: 0 0 8px var(--verde); }
+.paso.completado { background: #ffe3e6; }
+.paso.completado .punto { background: var(--verde); }
+
+/* ---------- Escena / Ramo ---------- */
+.escena {
+  position: relative;
+  width: min(440px, 88vw);
+  height: min(560px, 135vw);
+  min-height: 440px;
+  margin: 18px auto 6px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+.resplandor {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(230, 57, 86, 0.4) 0%, transparent 65%);
+  pointer-events: none;
+  animation: respirar 3s ease-in-out infinite;
+}
+@keyframes respirar {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.8; }
+  50% { transform: translateX(-50%) scale(1.08); opacity: 1; }
+}
+.sombra {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 26px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.22), transparent 70%);
+}
+
+.ramo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+/* Cada flor del ramo principal */
+.tallo-grupo {
+  position: absolute;
+  bottom: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: bottom center;
+}
+.tallo {
+  position: relative;
+  width: 7px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--verde-oscuro), var(--verde) 50%, var(--verde-oscuro));
+  transform-origin: bottom center;
+  animation: crecerTallo 1.2s ease-out both;
+}
+@keyframes crecerTallo {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+/* Hojas pegadas al tallo (antes flotaban a 38px) */
+.hoja {
+  position: absolute;
+  width: 38px;
+  height: 18px;
+  background: linear-gradient(135deg, #52b364, var(--verde-oscuro));
+  box-shadow: 0 2px 4px rgba(42, 122, 56, 0.35);
+  animation: aparecer 0.7s ease-out both;
+}
+.hoja.izq {
+  left: -24px;
+  transform: rotate(-28deg);
+  transform-origin: right center;
+  border-radius: 100% 4px 100% 4px;
+}
+.hoja.der {
+  right: -24px;
+  transform: rotate(28deg);
+  transform-origin: left center;
+  border-radius: 4px 100% 4px 100%;
+}
+@keyframes aparecer {
+  from { transform: scale(0); opacity: 0; }
+  to { opacity: 1; }
+}
+.hoja.izq { animation-name: aparecerIzq; }
+.hoja.der { animation-name: aparecerDer; }
+@keyframes aparecerIzq {
+  from { transform: rotate(-28deg) scale(0); opacity: 0; }
+  to { transform: rotate(-28deg) scale(1); opacity: 1; }
+}
+@keyframes aparecerDer {
+  from { transform: rotate(28deg) scale(0); opacity: 0; }
+  to { transform: rotate(28deg) scale(1); opacity: 1; }
+}
+
+/* Cabeza de flor amarilla */
+.flor {
+  position: relative;
+  animation: abrirFlor 1s ease-out both;
+  filter: drop-shadow(0 6px 8px var(--sombra));
+}
+@keyframes abrirFlor {
+  0% { transform: scale(0) rotate(-40deg); }
+  60% { transform: scale(1.25) rotate(8deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+.flor .petalo {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 32%;
+  height: 52%;
+  transform-origin: 50% 100%;
+  background: radial-gradient(circle at 50% 30%, #fff6ab 0%, var(--amarillo-claro) 35%, var(--amarillo) 65%, var(--amarillo-fuerte) 100%);
+  border-radius: 50% 50% 45% 45% / 65% 65% 35% 35%;
+  border: 1.5px solid #d99a00;
+}
+.flor .centro {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 35%, #a06a00 2px, transparent 2.5px),
+    radial-gradient(circle at 60% 50%, #a06a00 2px, transparent 2.5px),
+    radial-gradient(circle at 40% 65%, #a06a00 2px, transparent 2.5px),
+    radial-gradient(circle, #7a4d00 0%, #c07f00 45%, #f0a500 100%);
+  border: 2px solid #7a4d00;
+  box-shadow: inset 0 -3px 6px rgba(0,0,0,0.3);
+  z-index: 3;
+}
+.flor.boton .petalo { filter: brightness(0.82) saturate(0.7); }
+
+/* Papel que envuelve el ramo */
+.papel {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 68%;
+  height: 150px;
+  background: linear-gradient(160deg, #ffe3e6, #ff8fa3 55%, var(--rojo));
+  clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%);
+  border-top: 3px solid var(--rojo-oscuro);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 34px;
+  animation: aparecer 0.9s ease-out both;
+  box-shadow: 0 10px 20px var(--sombra);
+  z-index: 10;
+}
+.papel::after {
+  content: "💛 21 Sept 💛";
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--rojo-oscuro);
+  background: rgba(255,255,255,0.7);
+  padding: 6px var(--s3);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.lazo {
+  position: absolute;
+  bottom: 118px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  line-height: 1;
+  z-index: 11;
+  animation: aparecer 0.8s 0.3s both;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+}
+
+.estado {
+  min-height: 28px;
+  font-weight: 700;
+  color: var(--muted);
+  margin: var(--s2) 0;
+}
+
+/* ---------- Botones ---------- */
+.botones {
+  display: flex;
+  gap: var(--s3);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10px;
+}
+.btn {
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 13px 22px;
+  border-radius: 999px;
+  cursor: pointer;
+  border: 2px solid var(--marron);
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out, background-color 150ms ease-out;
+}
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+.btn-principal {
+  background: linear-gradient(180deg, #f0506e, var(--rojo-fuerte));
+  color: #fff;
+  border-color: var(--rojo-oscuro);
+  box-shadow: 0 5px 0 var(--rojo-oscuro);
+}
+.btn-principal:hover { transform: translateY(-2px); background: linear-gradient(180deg, #ff6d8a, #d61e45); }
+.btn-principal:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--rojo-oscuro); }
+.btn-secundario {
+  background: var(--surface);
+  color: var(--foreground);
+  box-shadow: 0 5px 0 rgba(143, 15, 46, 0.35);
+}
+.btn-secundario:hover { background: #fff7d6; transform: translateY(-2px); }
+.btn-secundario:active { transform: translateY(3px); box-shadow: none; }
+
+/* ---------- Tulipanes ---------- */
+.escena-tulipanes { min-height: 440px; }
+.tulipan-grupo {
+  position: absolute;
+  bottom: 115px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: bottom center;
+}
+.tulipan {
+  position: relative;
+  animation: abrirFlor 0.9s ease-out both;
+  filter: drop-shadow(0 6px 8px var(--sombra));
+}
+.tulipan .petalo-t {
+  position: absolute;
+  bottom: 0;
+  width: 46%;
+  height: 88%;
+  background: linear-gradient(180deg, #fff3a0 0%, var(--amarillo-claro) 25%, var(--amarillo) 60%, #e89b00 100%);
+  border: 1.5px solid #c07f00;
+}
+.tulipan .petalo-t.izq {
+  left: 8%;
+  border-radius: 50% 20% 40% 60% / 70% 30% 60% 30%;
+  transform: rotate(-8deg);
+}
+.tulipan .petalo-t.der {
+  right: 8%;
+  border-radius: 20% 50% 60% 40% / 30% 70% 30% 60%;
+  transform: rotate(8deg);
+}
+.tulipan .petalo-t.centro-t {
+  left: 27%;
+  width: 46%;
+  z-index: 2;
+  border-radius: 18% 18% 45% 45% / 12% 12% 55% 55%;
+  background: linear-gradient(180deg, #ffedb0 0%, var(--amarillo) 40%, var(--amarillo-fuerte) 100%);
+  clip-path: polygon(0 12%, 18% 0, 38% 12%, 55% 0, 75% 12%, 100% 2%, 100% 100%, 0 100%);
+}
+.tarjetas-significado {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 26px;
+  width: 100%;
+  max-width: 700px;
+}
+.tarjeta {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radio);
+  padding: 18px 14px;
+  box-shadow: 0 8px 18px rgba(180,130,0,0.15);
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+}
+.tarjeta:hover { transform: translateY(-2px); box-shadow: 0 12px 22px rgba(194, 23, 63, 0.2); }
+.tarjeta span { font-size: 1.8rem; }
+.tarjeta strong { display: block; margin: 6px 0 var(--s1); }
+.tarjeta p { color: var(--muted); font-size: 0.9rem; line-height: 1.55; }
+
+/* ---------- Sobre / Mensaje ---------- */
+/* FIX: la carta al abrir necesita aire arriba; antes tapaba el título
+   y la tapa (triángulo) quedaba encima del texto. */
+.sobre-escena {
+  margin: 30px auto 10px;
+  width: min(420px, 90vw);
+  display: flex;
+  justify-content: center;
+  padding-top: 170px;
+}
+.sobre {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  cursor: pointer;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  transition: margin 300ms ease-out;
+}
+.sobre-cuerpo {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, #ffdf5e, #f5b800);
+  border: 3px solid var(--marron);
+  border-radius: 16px;
+  z-index: 2;
+}
+.carta {
+  position: absolute;
+  left: 6%;
+  width: 88%;
+  height: 92%;
+  bottom: 6%;
+  background: var(--surface);
+  border: 2px solid var(--marron);
+  border-radius: 12px;
+  padding: var(--s5) 18px;
+  z-index: 1;
+  transition: transform 450ms ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: var(--s2);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+}
+/* Al abrir: la carta sube CON aire (padding-top de la escena) y pasa
+   por encima de la tapa; la tapa rota queda detrás del cuerpo. */
+.sobre.abierto .carta { transform: translateY(-68%); z-index: 5; overflow: auto; }
+/* Evita que los hijos flex se compriman y solapen con textos largos */
+.carta > * { flex-shrink: 0; }
+.sobre-tapa {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 55%;
+  background: linear-gradient(180deg, #ffe55c, #f0ad00);
+  border: 3px solid var(--marron);
+  border-bottom: none;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top center;
+  transition: transform 450ms ease;
+  backface-visibility: hidden;
+  z-index: 4;
+  border-radius: 16px 16px 0 0;
+}
+.sobre.abierto .sobre-tapa { transform: rotateX(180deg); z-index: 1; }
+.sobre-sello {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  background: #fff;
+  border: 3px solid var(--marron);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  z-index: 6;
+  transition: opacity 150ms ease-out, transform 150ms ease-out;
+}
+.sobre.abierto .sobre-sello { opacity: 0; transform: translate(-50%, -50%) scale(0.6); pointer-events: none; }
+.carta-para { font-size: 0.85rem; font-weight: 800; color: var(--rojo-fuerte); }
+.carta-titulo { font-size: 1.35rem; text-wrap: balance; }
+.carta-texto {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--muted);
+  white-space: pre-line;
+  min-height: 90px;
+  text-wrap: pretty;
+}
+.carta-firma { font-weight: 800; font-style: italic; }
+
+.footer {
+  padding: 28px var(--s4) 34px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* ==========================================================
+   ZONA ROJA — toda la página es rosa/roja; solo los
+   girasoles de la sección 1 conservan el amarillo.
+   (Los tokens --rojo* viven en :root y se usan globalmente.)
+   ========================================================== */
+:root {
+  --rojo: #e63956;
+  --rojo-fuerte: #c2173f;
+  --rojo-oscuro: #8f0f2e;
+  --rojo-claro: #ff8fa3;
+  --rojo-suave: #ffd9e0;
+  --rosa-fondo: #ffe3e6;
+}
+
+/* Fondo rosado suave en la zona roja */
+.seccion-tulipanes {
+  background: linear-gradient(180deg, transparent, rgba(255, 227, 230, 0.7) 20%, rgba(255, 227, 230, 0.7) 80%, transparent);
+}
+.seccion-mensaje {
+  background: linear-gradient(180deg, transparent, rgba(255, 227, 230, 0.85));
+}
+
+/* Tulipanes rojos */
+.tulipan .petalo-t {
+  background: linear-gradient(180deg, #ffd9e0 0%, var(--rojo-claro) 25%, var(--rojo) 60%, #a3122e 100%);
+  border: 1.5px solid #a3122e;
+}
+.tulipan .petalo-t.centro-t {
+  background: linear-gradient(180deg, #ffe3e6 0%, var(--rojo) 40%, var(--rojo-fuerte) 100%);
+}
+
+/* El ramo de tulipanes lleva sello rojo; el de girasoles conserva el 💛 */
+.seccion-tulipanes .papel::after {
+  content: "❤️ 21 Sept ❤️";
+  color: var(--rojo-oscuro);
+}
+
+/* Sobre rojo */
+.seccion-mensaje .sobre-cuerpo {
+  background: linear-gradient(160deg, #ff9eb0, var(--rojo));
+  border-color: var(--rojo-oscuro);
+}
+.seccion-mensaje .sobre-tapa {
+  background: linear-gradient(180deg, #ff8fa3, #d61e45);
+  border-color: var(--rojo-oscuro);
+}
+.seccion-mensaje .sobre-sello {
+  border-color: var(--rojo-oscuro);
+}
+.seccion-mensaje .carta {
+  border-color: var(--rojo-oscuro);
+}
+.seccion-mensaje .carta-para { color: var(--rojo-fuerte); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  /* Antes la navbar se hacía columna completa y ocupaba media pantalla */
+  .navbar-inner { flex-direction: row; flex-wrap: wrap; justify-content: center; row-gap: var(--s2); }
+  .logo-texto { font-size: 0.92rem; }
+  .nav-link { font-size: 0.85rem; padding: 7px var(--s3); }
+  .seccion { padding: 44px 14px; }
+  .tarjetas-significado { grid-template-columns: 1fr; max-width: 340px; }
+  .escena { min-height: 400px; height: min(560px, 150vw); }
+  .papel { height: 125px; }
+  .btn { width: 100%; max-width: 320px; }
+  .sobre-escena { padding-top: 150px; }
+  .sobre.abierto .carta { transform: translateY(-58%); }
+  .carta-texto { font-size: 0.92rem; }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+  .tarjetas-significado { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
